@@ -10,13 +10,13 @@ import matplotlib.colors as pltcolors
 
 def main():
     duration = 100
-    resolution = 10
+    resolution = 5
     cell_x = 50
     cell_y = 40
     cell_z = 40
     pml = 1
-    src_buffer = 1
-    mosi_buffer = 1
+    src_buffer = 2
+    mosi_buffer = 2
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
@@ -27,8 +27,8 @@ def main():
     cladding_min_radius = cladding_min_thickness + core_radius
     mosi_thickness = 0.5
     mosi_width = 2
-    bottom_min = core_radius + mosi_thickness + 2
-    axis_y = 3 * cell_y / 8 - pml - bottom_min
+    bottom_min = core_radius + mosi_thickness
+    axis_y = 5 * cell_y / 12 - pml - bottom_min
     cell = mp.Vector3(cell_x, cell_y, cell_z)
     freq = 1/wavelength
     src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, 0, 0)
@@ -77,11 +77,21 @@ def main():
 
     sim.run(until=duration)
 
-    # eps_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
-    # plt.figure()
-    # plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
-    # plt.axis('off')
-    # plt.show()
+    eps_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
+    plt.figure()
+    plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+    plt.axis('off')
+    plt.show()
+
+    cm = pltcolors.LinearSegmentedColormap.from_list(
+            'em', [(0,0,1), (0,0,0), (1,0,0)])
+
+    ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
+    plt.figure()
+    plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+    plt.imshow(ez_data.transpose(), interpolation='spline36', cmap='RdBu', alpha=0.9)
+    plt.axis('off')
+    plt.show()
 
     # for normalization run, save flux fields data for reflection plane
     no_absorber_refl_data = sim.get_flux_data(refl)
