@@ -12,15 +12,15 @@ def main():
     duration = 100
     resolution = 5
     cell_x = 50
-    cell_y = 40
-    cell_z = 40
+    cell_y = 50
+    cell_z = 70
     pml = 1
     src_buffer = 2
     mosi_buffer = 2
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
-    cladding_thickness = 125
+    cladding_thickness = 60
     core_thickness = 8
     core_radius = core_thickness / 2
     cladding_min_thickness = 1
@@ -28,14 +28,17 @@ def main():
     mosi_thickness = 0.5
     mosi_width = 2
     bottom_min = core_radius + mosi_thickness
-    axis_y = 5 * cell_y / 12 - pml - bottom_min
+    axis_y = 4 * cell_y / 10 - pml - bottom_min
     cell = mp.Vector3(cell_x, cell_y, cell_z)
     freq = 1/wavelength
-    src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, 0, 0)
+    src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y / 2, 0)
 
-    default_material=mp.Medium(epsilon=1.444)
+    default_material=mp.Medium(epsilon=1)
 
-    geometry = [mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=core_radius,
+    geometry = [mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=cladding_thickness / 2,
+                            material=mp.Medium(epsilon=1.444),
+                            axis=mp.Vector3(1,0,0)),
+                mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=core_radius,
                             material=mp.Medium(epsilon=1.4475),
                             axis=mp.Vector3(1,0,0)),
                 mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
@@ -48,8 +51,8 @@ def main():
                         material=mp.Medium(epsilon=1.61, D_conductivity=2*math.pi*wavelength*7.55/1.61/50))
 
     sources = [mp.EigenModeSource(src=mp.ContinuousSource(frequency=freq),
-              center=src_pt,
-              size=mp.Vector3(0, cell_y - 2 * pml, cell_z - 2 * pml),
+              center=mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y, 0),
+              size=mp.Vector3(0, 3 * core_thickness, 3 * core_thickness),
               eig_match_freq=True,
               eig_parity=mp.ODD_Z)]
 
