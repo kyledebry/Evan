@@ -8,19 +8,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as pltcolors
 
+
 def main():
-    duration = 100
+    duration = 30
     resolution = 5
-    cell_x = 50
+    cell_x = 20
     cell_y = 50
     cell_z = 70
-    pml = 1
+    pml = 2
     src_buffer = 2
     mosi_buffer = 2
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
-    cladding_thickness = 60
+    cladding_thickness = 55
     core_thickness = 8
     core_radius = core_thickness / 2
     cladding_min_thickness = 1
@@ -51,8 +52,8 @@ def main():
                         material=mp.Medium(epsilon=1.61, D_conductivity=2*math.pi*wavelength*7.55/1.61/50))
 
     sources = [mp.EigenModeSource(src=mp.ContinuousSource(frequency=freq),
-              center=mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y, 0),
-              size=mp.Vector3(0, 3 * core_thickness, 3 * core_thickness),
+              center=mp.Vector3(),
+              size=mp.Vector3(0, cell_y - 4 * pml, cell_z - 4 * pml),
               eig_match_freq=True,
               eig_parity=mp.ODD_Z)]
 
