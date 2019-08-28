@@ -9,6 +9,15 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as pltcolors
 
 
+vals = []
+
+
+def get_slice(sim):
+    vals.append(sim.get_array(center=Vector3(),
+                              size=Vector3(cell_x, cell_y, 0),
+                              component=mp.Ez))
+
+
 def main():
     duration = 30
     resolution = 5
@@ -120,7 +129,13 @@ def main():
 
     sim.load_minus_flux_data(refl, no_absorber_refl_data)
 
-    sim.run(until=duration)
+    output_slice = mp.Volume(center=mp.Vector3(), size=(cell_x, cell_y, 0))
+
+    sim.run(mp.at_beginning(mp.output_epsilon),
+            mp.to_appended("ez_z0",
+                           mp.in_volume(output_slice,
+                                        mp.at_every(1, mp.output_efield_z))),
+            until=duration)
 
     absorber_refl_flux = mp.get_fluxes(refl)
     absorber_tran_flux = mp.get_fluxes(tran)
