@@ -56,7 +56,8 @@ def main():
               center=mp.Vector3(-cell_x / 2 + pml + src_buffer, axis_y, 0),
               size=mp.Vector3(0, cell_y - 4 * pml, cell_z - 4 * pml),
               eig_match_freq=True,
-              eig_parity=mp.ODD_Z)]
+              eig_parity=mp.EVEN_Z+mp.EVEN_Y,
+              eig_band=1)]
 
     pml_layers = [mp.PML(pml)]
 
