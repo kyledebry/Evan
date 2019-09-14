@@ -12,16 +12,16 @@ import matplotlib.colors as pltcolors
 def main():
     duration = 60
     resolution = 5
-    cell_x = 20
-    cell_y = 20
-    cell_z = 20
+    cell_x = 30
+    cell_y = 130
+    cell_z = 130
     pml = 2
     src_buffer = 2
     mosi_buffer = 2
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
-    wavelength = 1 # .55
-    cladding_thickness = 40
+    wavelength = 1.55
+    cladding_thickness = 100
     core_thickness = 8
     core_radius = core_thickness / 2
     cladding_min_thickness = 1
@@ -37,9 +37,9 @@ def main():
 
     default_material=mp.Medium(epsilon=1)
 
-    geometry = [# mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=cladding_thickness / 2,
-    #                         material=mp.Medium(epsilon=1.444),
-    #                         axis=mp.Vector3(1,0,0)),
+    geometry = [mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=cladding_thickness / 2,
+                            material=mp.Medium(epsilon=1.444),
+                            axis=mp.Vector3(1,0,0)),
                 mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=core_radius,
                             material=mp.Medium(epsilon=1.4475),
                             axis=mp.Vector3(1,0,0)),
@@ -86,21 +86,29 @@ def main():
                                         mp.at_every(0.25, mp.output_efield_z))),
             until=duration)
 
+
     eps_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
-    plt.figure()
-    plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
-    plt.axis('off')
-    plt.show()
+    print("Data collected")
+
+    if mp.am_master():
+        print("I am master")
+        plt.figure()
+        plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+        plt.axis('off')
+        plt.show()
+        print("Plotted")
 
     cm = pltcolors.LinearSegmentedColormap.from_list(
             'em', [(0,0,1), (0,0,0), (1,0,0)])
 
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
-    plt.figure()
-    plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
-    plt.imshow(ez_data.transpose(), interpolation='spline36', cmap='RdBu', alpha=0.9)
-    plt.axis('off')
-    plt.show()
+    if mp.am_master():
+        plt.figure()
+        plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+        plt.imshow(ez_data.transpose(), interpolation='spline36', cmap='RdBu', alpha=0.9)
+        plt.axis('off')
+        plt.show()
+        print("Plotted 2")
 
     # for normalization run, save flux fields data for reflection plane
     no_absorber_refl_data = sim.get_flux_data(refl)
