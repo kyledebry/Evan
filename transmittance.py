@@ -9,12 +9,22 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as pltcolors
 
 
+class ZeroNormalize(pltcolors.Normalize):
+    def __init__(self, vmax=1, clip=False):
+        vmin = -vmax
+        pltcolors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        x, y = [self.vmin, 0, self.vmax], [0, 0.5, 1]
+        return np.ma.masked_array(np.interp(value, x, y))
+
+
 def main():
     duration = 60
     resolution = 5
     cell_x = 30
-    cell_y = 130
-    cell_z = 130
+    cell_y = 70
+    cell_z = 110
     pml = 2
     src_buffer = 2
     mosi_buffer = 2
@@ -29,7 +39,7 @@ def main():
     mosi_thickness = 0.5
     mosi_width = 2
     bottom_min = core_radius + mosi_thickness
-    axis_y = 0 #4 * cell_y / 10 - pml - bottom_min
+    axis_y = 4 * cell_y / 10 - pml - bottom_min
     cell = mp.Vector3(cell_x, cell_y, cell_z)
     freq = 1/wavelength
     src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y / 2, 0)
@@ -43,9 +53,9 @@ def main():
                 mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=core_radius,
                             material=mp.Medium(epsilon=1.4475),
                             axis=mp.Vector3(1,0,0)),
-                # mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
-                #          center=mp.Vector3(0, cell_y / 2 + axis_y + cladding_min_radius, 0),
-                #          material=mp.Medium(epsilon=1))
+                mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
+                         center=mp.Vector3(0, cell_y / 2 + axis_y + cladding_min_radius, 0),
+                         material=mp.Medium(epsilon=1))
                 ]
 
     absorber = mp.Block(mp.Vector3(mosi_length, mosi_thickness, mosi_width),
@@ -56,7 +66,7 @@ def main():
               center=mp.Vector3(-cell_x / 2 + pml + src_buffer, axis_y, 0),
               size=mp.Vector3(0, cell_y - 4 * pml, cell_z - 4 * pml),
               eig_match_freq=True,
-              eig_parity=mp.EVEN_Z+mp.EVEN_Y,
+              eig_parity=mp.ODD_Z,
               eig_band=1)]
 
     pml_layers = [mp.PML(pml)]
@@ -68,7 +78,7 @@ def main():
                         resolution=resolution,
                         eps_averaging=False,
                         default_material=default_material,
-                        symmetries=[mp.Mirror(mp.Z)])
+                        symmetries=[mp.Mirror(mp.Z, phase=-1)])
 
     fr_y = max(min(cladding_thickness, cell_y - 2 * pml), 0)
     fr_z = max(min(cladding_thickness, cell_z - 2 * pml), 0)
@@ -89,19 +99,22 @@ def main():
 
 
     eps_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
+
+    max_field = 0.1
+
     print("Data collected")
 
-    if mp.am_master():
-        print("I am master")
-        plt.figure()
-        plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
-        plt.axis('off')
-        plt.show()
-        print("Plotted")
-
-    cm = pltcolors.LinearSegmentedColormap.from_list(
-            'em', [(0,0,1), (0,0,0), (1,0,0)])
-
+    # if mp.am_master():
+    #     print("I am master")
+    #     plt.figure()
+    #     plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+    #     plt.axis('off')
+    #     plt.show()
+    #     print("Plotted")
+    #
+    # cm = pltcolors.LinearSegmentedColormap.from_list(
+    #         'em', [(0,0,1), (0,0,0), (1,0,0)])
+    #
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
     if mp.am_master():
         plt.figure()
@@ -111,6 +124,23 @@ def main():
         plt.show()
         print("Plotted 2")
 
+    eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
+    num_x = 4
+    num_y = 3
+    fig, ax = plt.subplots(num_x, num_y)
+    fig.suptitle('Cross Sectional Ez Fields')
+    for i in range(num_x * num_y):
+        ez_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4 + i / resolution / 2), size=mp.Vector3(0, cell_y, cell_z), component=mp.Ez)
+        ax_num = i // num_y, i % num_y
+        if mp.am_master():
+            ax[ax_num].imshow(eps_cross_data, interpolation='spline36', cmap='binary')
+            ax[ax_num].imshow(ez_cross_data, interpolation='spline36', cmap='RdBu', alpha=0.9, norm=ZeroNormalize(vmax=np.max(max_field)))
+            ax[ax_num].axis('off')
+            ax[ax_num].set_title('x = {}'.format(cell_x/4 + i / resolution))
+            # ax[i].show()
+            print("Plotted 3-{}".format(i))
+    if mp.am_master():
+        plt.show()
     # for normalization run, save flux fields data for reflection plane
     no_absorber_refl_data = sim.get_flux_data(refl)
     # save incident power for transmission plane
