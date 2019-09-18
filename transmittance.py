@@ -34,7 +34,7 @@ def main():
     cladding_thickness = 100
     core_thickness = 8
     core_radius = core_thickness / 2
-    cladding_min_thickness = 1
+    cladding_min_thickness = 0.5
     cladding_min_radius = cladding_min_thickness + core_radius
     mosi_thickness = 0.5
     mosi_width = 2
@@ -112,7 +112,7 @@ def main():
         plt.figure()
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
         plt.axis('off')
-        plt.savefig('Sim3_Eps_A.png', dpi=300)
+        plt.savefig('Sim4_Eps_A.png', dpi=300)
 
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
     if mp.am_master():
@@ -120,7 +120,7 @@ def main():
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
         plt.imshow(ez_data.transpose(), interpolation='spline36', cmap='RdBu', alpha=0.9)
         plt.axis('off')
-        plt.savefig('Sim3_Ez_A.png', dpi=300)
+        plt.savefig('Sim4_Ez_A.png', dpi=300)
 
     eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
     num_x = 4
@@ -139,7 +139,7 @@ def main():
             # ax[i].show()
             print("Plotted 3-{}".format(i))
     if mp.am_master():
-        plt.savefig('Sim3_Ez_CS_A.png', dpi=300)
+        plt.savefig('Sim4_Ez_CS_A.png', dpi=300)
 
 
     sim.reset_meep()
@@ -187,7 +187,7 @@ def main():
         plt.figure()
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
         plt.axis('off')
-        plt.savefig('Sim3_Eps_B.png', dpi=300)
+        plt.savefig('Sim4_Eps_B.png', dpi=300)
 
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
     if mp.am_master():
@@ -195,7 +195,7 @@ def main():
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
         plt.imshow(ez_data.transpose(), interpolation='spline36', cmap='RdBu', alpha=0.9)
         plt.axis('off')
-        plt.savefig('Sim3_Ez_B.png', dpi=300)
+        plt.savefig('Sim4_Ez_B.png', dpi=300)
 
     eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
     num_x = 4
@@ -214,4 +214,4 @@ def main():
             # ax[i].show()
             print("Plotted 3-{}".format(i))
     if mp.am_master():
-        plt.savefig('Sim3_Ez_CS_B.png', dpi=300)
+        plt.savefig('Sim4_Ez_CS_B.png', dpi=300)
