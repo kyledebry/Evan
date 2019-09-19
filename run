@@ -1,0 +1,3 @@
+#!/bin/bash
+mpirun -np $2 --use-hwthread-cpus --bind-to core python main.py $1 2>&1 | tee $1.log
+

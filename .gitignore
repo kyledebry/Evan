@@ -1,4 +1,6 @@
 *.py[cod]
 *.h5
 *.gif
-make_*
+*.mp4
+.log
+__*
