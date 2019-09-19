@@ -49,7 +49,7 @@ def main():
     freq = 1/wavelength
     src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y / 2, 0)
     output_slice = mp.Volume(center=mp.Vector3(), size=(cell_x, cell_y, 0))
-    mosi_index = 1.61
+    mosi_index = index_core # 1.61
     mosi_thickness_comp = 50
     mosi_k = 7.55
     conductivity = 2 * math.pi * wavelength * mosi_k / mosi_index / mosi_thickness_comp
