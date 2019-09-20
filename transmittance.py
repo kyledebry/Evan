@@ -26,15 +26,15 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 6
+    resolution = 3
     # Simulation volume (um)
-    cell_x = 120
-    cell_y = 70
-    cell_z = 110
+    cell_x = 100
+    cell_y = 60
+    cell_z = 100
     # Refractive indicies
     index_clad = 1.444
-    index_core = 1.4475
-    numerical_aperature = math.sqrt(index_core^2 - index_clad^2)
+    index_core = 1.501 # For NA of 0.410
+    numerical_aperature = math.sqrt(index_core ** 2 - index_clad ** 2)
     # Durations in units of micron/c
     duration = 2 * cell_x # round(1.5 * cell_x + 30)
     # Absorbing layer on boundary
@@ -45,10 +45,10 @@ def main():
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
-    cladding_thickness = 100
-    core_thickness = 8
+    cladding_thickness = 90
+    core_thickness = 2.3
     core_radius = core_thickness / 2
-    cladding_min_thickness = 1
+    cladding_min_thickness = 0.2
     cladding_min_radius = cladding_min_thickness + core_radius
     mosi_thickness = 0.5
     mosi_width = 2
@@ -57,11 +57,12 @@ def main():
     bottom_min = core_radius + mosi_thickness
     axis_y = 4 * cell_y / 10 - pml - bottom_min
     # Properties of the absorber
-    mosi_center_y = axis_y # + cladding_min_radius + mosi_thickness / 2
-    mosi_index = index_core # 1.61
+    mosi_center_y = axis_y + cladding_min_radius + mosi_thickness / 2
     # MoSi is ~50 times thicker than in reality to have enough simulation pixels
     # so we reduce its absorption by a factor of 50 to compensate
     mosi_thickness_comp = 50
+    # Also compensate the difference in index by the same amount
+    mosi_index = (1.61 - index_clad) / mosi_thickness_comp + index_clad
     mosi_k = 7.55
     conductivity = 2 * math.pi * wavelength * mosi_k / mosi_index / mosi_thickness_comp
 
@@ -86,6 +87,10 @@ def main():
     print('Absorber center: {} um, {} um, {} um'.format(mosi_center_x, mosi_center_y, 0))
     print('Absorber n: {}, k: {}'.format(mosi_index, mosi_k))
     print('Absorber compensation for thickness: {}'.format(mosi_thickness_comp))
+    print('For this run, a high NA fiber is being simulated. This is using the '
+    + '0.410 NA and 2.3 um core diameter values found at '
+    + 'https://www.nufern.com/pam/optical_fibers/988/UHNA7/, and assuming that '
+    + 'the cladding index is 1.444 as in standard fiber.')
     print('\n\n**********\n\n')
 
     default_material=mp.Medium(epsilon=1)

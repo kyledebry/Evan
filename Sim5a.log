@@ -1,0 +1,330 @@
+Using MPI version 3.1, 14 processes
+File prefix: Sim5a
+Duration: 200
+Resolution: 3
+Dimensions: 100 um, 60 um, 100 um
+Wavelength: 1.55 um
+Distance from core to absorber: 0.2 um
+Core thickness: 2.3 um
+Cladding max thickness: 90 um
+Core index: 1.501; cladding index: 1.444
+Numerical aperature: 0.4097133144041086
+Absorber dimensions: 90 um, 0.5 um, 2 um
+Absorber center: 1.0 um, 21.950000000000003 um, 0 um
+Absorber n: 1.44732, k: 7.55
+Absorber compensation for thickness: 50
+For this run, a high NA fiber is being simulated. This is using the 0.410 NA and 2.3 um core diameter values found at https://www.nufern.com/pam/optical_fibers/988/UHNA7/, and assuming that the cladding index is 1.444 as in standard fiber.
+
+
+**********
+
+
+-----------
+Initializing structure...
+Halving computational cell along direction z
+Splitting into 12 chunks evenly
+time for choose_chunkdivision = 0.0296243 s
+Working in 3D dimensions.
+Computational cell is 100 x 60 x 100 with resolution 3
+     cylinder, center = (0,20.35,0)
+          radius 45, height 1e+20, axis (1, 0, 0)
+          dielectric constant epsilon diagonal = (1.444,1.444,1.444)
+     cylinder, center = (0,20.35,0)
+          radius 1.15, height 1e+20, axis (1, 0, 0)
+          dielectric constant epsilon diagonal = (1.4475,1.4475,1.4475)
+     block, center = (0,51.7,0)
+          size (1e+20,60,1e+20)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1,1,1)
+     block, center = (1,21.95,0)
+          size (1e+20,0.5,2)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1.44732,1.44732,1.44732)
+time for set_epsilon = 0.450738 s
+-----------
+    iteration   40: trace = 0.4197329975257645 (0.0223674% change)
+    iteration   80: trace = 0.4181619513816091 (0.00457463% change)
+    iteration  120: trace = 0.4177124603211359 (0.000912181% change)
+    iteration  160: trace = 0.4175998787873937 (0.00026684% change)
+    iteration  200: trace = 0.4175714719106552 (7.49386e-05% change)
+    iteration  240: trace = 0.4175646622774456 (2.71789e-05% change)
+    iteration  280: trace = 0.4175601560657553 (2.95316e-05% change)
+    iteration  320: trace = 0.4175572986134117 (1.86167e-05% change)
+    iteration  360: trace = 0.4175527719248845 (2.59114e-05% change)
+    iteration  400: trace = 0.4175489196489483 (2.17404e-05% change)
+    iteration  440: trace = 0.4175422162783229 (3.01554e-05% change)
+    iteration  480: trace = 0.4175361883316021 (4.56588e-05% change)
+    iteration  520: trace = 0.4175273451171608 (4.25233e-05% change)
+    iteration  560: trace = 0.4175198304449365 (5.86567e-05% change)
+    iteration  600: trace = 0.4175127843941555 (4.14495e-05% change)
+    iteration  640: trace = 0.4175056936601582 (3.61496e-05% change)
+    iteration  680: trace = 0.4175006677528015 (2.32281e-05% change)
+    iteration  720: trace = 0.41749612216654 (1.93048e-05% change)
+    iteration  760: trace = 0.4174929925304222 (1.74329e-05% change)
+    iteration  800: trace = 0.4174903270714055 (1.16645e-05% change)
+    iteration  840: trace = 0.4174885866079263 (1.12074e-05% change)
+    iteration  880: trace = 0.4174873359374669 (7.05018e-06% change)
+    iteration  920: trace = 0.4174863348943366 (4.81991e-06% change)
+    iteration  960: trace = 0.4174857054821611 (2.81935e-06% change)
+    iteration 1000: trace = 0.4174852147825311 (1.95427e-06% change)
+    iteration 1040: trace = 0.4174848976635306 (1.68181e-06% change)
+    iteration 1080: trace = 0.417484653004893 (1.08889e-06% change)
+    iteration 1120: trace = 0.4174844906691869 (1.66615e-06% change)
+    iteration 1160: trace = 0.4174843839649279 (5.79401e-07% change)
+    iteration 1200: trace = 0.417484300965877 (4.07337e-07% change)
+    iteration 1240: trace = 0.417484248605868 (2.35791e-07% change)
+    iteration 1280: trace = 0.4174842086679295 (1.64268e-07% change)
+    iteration 1320: trace = 0.4174841828755835 (1.28385e-07% change)
+    iteration 1360: trace = 0.4174841633770647 (8.78774e-08% change)
+    iteration 1400: trace = 0.4174841507146545 (9.31499e-08% change)
+    iteration 1440: trace = 0.417484142049145 (4.86952e-08% change)
+    iteration 1480: trace = 0.4174841353600351 (3.23854e-08% change)
+    iteration 1520: trace = 0.4174841310881914 (1.98433e-08% change)
+    iteration 1560: trace = 0.4174841278479905 (1.3742e-08% change)
+    iteration 1600: trace = 0.4174841257552904 (1.02802e-08% change)
+    iteration 1640: trace = 0.4174841241882375 (7.10761e-09% change)
+    iteration 1680: trace = 0.4174841231640413 (7.50277e-09% change)
+    iteration 1720: trace = 0.4174841224616119 (4.02279e-09% change)
+    iteration 1760: trace = 0.4174841219222347 (2.60694e-09% change)
+    iteration 1800: trace = 0.4174841215753723 (1.54379e-09% change)
+    iteration 1840: trace = 0.4174841213149255 (1.17475e-09% change)
+    iteration 1880: trace = 0.4174841211443256 (8.60382e-10% change)
+    iteration 1920: trace = 0.4174841210175118 (5.70091e-10% change)
+    iteration 1960: trace = 0.4174841209348794 (5.45267e-10% change)
+    iteration 2000: trace = 0.4174841208775145 (3.32189e-10% change)
+    iteration 2040: trace = 0.4174841208337193 (1.80847e-10% change)
+    iteration 2080: trace = 0.4174841208050399 (1.39082e-10% change)
+MPB solved for omega_1(0.776207,0,0) = 0.64613 after 2102 iters
+MPB solved for omega_1(0.775043,0,0) = 0.645161 after 18 iters
+MPB solved for omega_1(0.775043,0,0) = 0.645161 after 1 iters
+creating output file "./main-eps-000000.00.h5"...
+creating output file "./main-ez_z0.h5"...
+Meep progress: 0.16666666666666666/200.0 = 0.1% done in 13.9s, 16621.8s to go
+on time step 1 (time=0.166667), 12.9455 s/step
+Meep progress: 7.666666666666666/200.0 = 3.8% done in 17.9s, 450.2s to go
+on time step 46 (time=7.66667), 0.0907627 s/step
+Meep progress: 15.0/200.0 = 7.5% done in 22.0s, 270.8s to go
+on time step 90 (time=15), 0.0912084 s/step
+Meep progress: 22.333333333333332/200.0 = 11.2% done in 26.0s, 206.6s to go
+on time step 134 (time=22.3333), 0.0912251 s/step
+Meep progress: 29.833333333333332/200.0 = 14.9% done in 30.1s, 171.5s to go
+on time step 179 (time=29.8333), 0.0908104 s/step
+Meep progress: 37.166666666666664/200.0 = 18.6% done in 34.1s, 149.2s to go
+on time step 223 (time=37.1667), 0.090938 s/step
+Meep progress: 44.666666666666664/200.0 = 22.3% done in 38.1s, 132.6s to go
+on time step 268 (time=44.6667), 0.0906101 s/step
+Meep progress: 52.166666666666664/200.0 = 26.1% done in 42.2s, 119.6s to go
+on time step 313 (time=52.1667), 0.0906664 s/step
+Meep progress: 59.666666666666664/200.0 = 29.8% done in 46.3s, 108.9s to go
+on time step 358 (time=59.6667), 0.090571 s/step
+Meep progress: 67.0/200.0 = 33.5% done in 50.3s, 99.9s to go
+on time step 402 (time=67), 0.0917514 s/step
+Meep progress: 74.5/200.0 = 37.2% done in 54.4s, 91.7s to go
+on time step 447 (time=74.5), 0.0907849 s/step
+Meep progress: 81.83333333333333/200.0 = 40.9% done in 58.4s, 84.4s to go
+on time step 491 (time=81.8333), 0.0914124 s/step
+Meep progress: 89.16666666666666/200.0 = 44.6% done in 62.5s, 77.6s to go
+on time step 535 (time=89.1667), 0.0914069 s/step
+Meep progress: 96.66666666666666/200.0 = 48.3% done in 66.5s, 71.1s to go
+on time step 580 (time=96.6667), 0.0905354 s/step
+Meep progress: 104.0/200.0 = 52.0% done in 70.6s, 65.2s to go
+on time step 624 (time=104), 0.092442 s/step
+Meep progress: 111.33333333333333/200.0 = 55.7% done in 74.6s, 59.4s to go
+on time step 668 (time=111.333), 0.0916408 s/step
+Meep progress: 118.83333333333333/200.0 = 59.4% done in 78.7s, 53.8s to go
+on time step 713 (time=118.833), 0.0906712 s/step
+Meep progress: 126.16666666666666/200.0 = 63.1% done in 82.7s, 48.4s to go
+on time step 757 (time=126.167), 0.0909892 s/step
+Meep progress: 133.16666666666666/200.0 = 66.6% done in 86.7s, 43.5s to go
+on time step 799 (time=133.167), 0.0952844 s/step
+Meep progress: 140.0/200.0 = 70.0% done in 90.8s, 38.9s to go
+on time step 840 (time=140), 0.0997006 s/step
+Meep progress: 147.0/200.0 = 73.5% done in 94.8s, 34.2s to go
+on time step 882 (time=147), 0.0955958 s/step
+Meep progress: 154.0/200.0 = 77.0% done in 98.9s, 29.5s to go
+on time step 924 (time=154), 0.0965901 s/step
+Meep progress: 161.33333333333331/200.0 = 80.7% done in 102.9s, 24.7s to go
+on time step 968 (time=161.333), 0.0912561 s/step
+Meep progress: 168.66666666666666/200.0 = 84.3% done in 106.9s, 19.9s to go
+on time step 1012 (time=168.667), 0.0912447 s/step
+Meep progress: 176.0/200.0 = 88.0% done in 110.9s, 15.1s to go
+on time step 1056 (time=176), 0.0914206 s/step
+Meep progress: 183.33333333333331/200.0 = 91.7% done in 115.0s, 10.5s to go
+on time step 1100 (time=183.333), 0.091643 s/step
+Meep progress: 190.66666666666666/200.0 = 95.3% done in 119.0s, 5.8s to go
+on time step 1144 (time=190.667), 0.092422 s/step
+Meep progress: 197.83333333333331/200.0 = 98.9% done in 123.0s, 1.3s to go
+on time step 1187 (time=197.833), 0.0932374 s/step
+run 0 finished at t = 200.0 (1200 timesteps)
+
+
+**********
+
+
+Flux: 184.86728508634093
+Saved Sim5a_Eps_A.png
+Saved Sim5a_Ez_A.png
+Saved Sim5a_Ez_CS_A.png
+
+
+**********
+
+
+-----------
+Initializing structure...
+Halving computational cell along direction z
+Splitting into 12 chunks evenly
+time for choose_chunkdivision = 0.0271473 s
+Working in 3D dimensions.
+Computational cell is 100 x 60 x 100 with resolution 3
+     cylinder, center = (0,20.35,0)
+          radius 45, height 1e+20, axis (1, 0, 0)
+          dielectric constant epsilon diagonal = (1.444,1.444,1.444)
+     cylinder, center = (0,20.35,0)
+          radius 1.15, height 1e+20, axis (1, 0, 0)
+          dielectric constant epsilon diagonal = (1.4475,1.4475,1.4475)
+     block, center = (0,51.7,0)
+          size (1e+20,60,1e+20)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1,1,1)
+     block, center = (1,21.95,0)
+          size (1e+20,0.5,2)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1.44732,1.44732,1.44732)
+     block, center = (1,21.95,0)
+          size (90,0.5,2)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1.44732,1.44732,1.44732)
+time for set_epsilon = 0.393632 s
+time for set_conductivity = 0.0408209 s
+time for set_conductivity = 0.0409774 s
+time for set_conductivity = 0.0408074 s
+-----------
+    iteration   38: trace = 0.4195828318402667 (0.0260608% change)
+    iteration   76: trace = 0.4180473670323979 (0.00245429% change)
+    iteration  114: trace = 0.4177013641001712 (0.0010394% change)
+    iteration  152: trace = 0.4175759440187456 (0.000382979% change)
+    iteration  190: trace = 0.4175189704458163 (0.000256241% change)
+    iteration  228: trace = 0.4174968330945799 (6.6617e-05% change)
+    iteration  266: trace = 0.4174905930108924 (1.82372e-05% change)
+    iteration  304: trace = 0.4174883498650167 (1.11388e-05% change)
+    iteration  341: trace = 0.4174865351685671 (7.94183e-06% change)
+    iteration  379: trace = 0.4174855652435054 (4.47644e-06% change)
+    iteration  417: trace = 0.4174851464328164 (2.23097e-06% change)
+    iteration  455: trace = 0.4174848737519953 (1.65594e-06% change)
+    iteration  493: trace = 0.4174846020617987 (1.19616e-06% change)
+    iteration  531: trace = 0.417484445922715 (6.06282e-07% change)
+    iteration  569: trace = 0.4174843620719789 (4.7186e-07% change)
+    iteration  607: trace = 0.4174842955137216 (5.12719e-07% change)
+    iteration  645: trace = 0.4174842354810306 (2.77564e-07% change)
+    iteration  683: trace = 0.4174842015789428 (1.5067e-07% change)
+    iteration  721: trace = 0.4174841812195862 (1.07114e-07% change)
+    iteration  759: trace = 0.4174841623870765 (1.1736e-07% change)
+    iteration  797: trace = 0.4174841482110392 (6.84326e-08% change)
+    iteration  835: trace = 0.4174841409026595 (3.48654e-08% change)
+    iteration  873: trace = 0.4174841358744919 (3.44533e-08% change)
+    iteration  911: trace = 0.417484130722066 (2.92992e-08% change)
+    iteration  949: trace = 0.4174841274570857 (1.23745e-08% change)
+    iteration  987: trace = 0.4174841257911166 (8.87706e-09% change)
+    iteration 1025: trace = 0.4174841244118384 (1.04663e-08% change)
+    iteration 1063: trace = 0.4174841231617916 (5.8423e-09% change)
+    iteration 1101: trace = 0.4174841224257745 (2.74779e-09% change)
+    iteration 1139: trace = 0.4174841220132468 (2.15463e-09% change)
+    iteration 1176: trace = 0.417484121628964 (2.21453e-09% change)
+    iteration 1213: trace = 0.4174841213330211 (1.62923e-09% change)
+    iteration 1251: trace = 0.4174841211680461 (8.34707e-10% change)
+    iteration 1288: trace = 0.417484121065599 (6.20126e-10% change)
+    iteration 1325: trace = 0.4174841209599393 (5.32395e-10% change)
+    iteration 1363: trace = 0.4174841208838305 (3.64114e-10% change)
+    iteration 1400: trace = 0.4174841208473558 (2.00805e-10% change)
+    iteration 1437: trace = 0.4174841208200175 (1.96058e-10% change)
+    iteration 1475: trace = 0.4174841207915561 (1.09218e-10% change)
+MPB solved for omega_1(0.776207,0,0) = 0.64613 after 1501 iters
+MPB solved for omega_1(0.775043,0,0) = 0.645161 after 12 iters
+MPB solved for omega_1(0.775043,0,0) = 0.645161 after 1 iters
+creating output file "./main-eps-000000.00.h5"...
+creating output file "./main-ez_z0.h5"...
+Meep progress: 0.16666666666666666/200.0 = 0.1% done in 15.2s, 18176.8s to go
+on time step 1 (time=0.166667), 14.2759 s/step
+Meep progress: 6.833333333333333/200.0 = 3.4% done in 19.2s, 543.2s to go
+on time step 41 (time=6.83333), 0.101368 s/step
+Meep progress: 13.5/200.0 = 6.8% done in 23.3s, 322.1s to go
+on time step 81 (time=13.5), 0.102479 s/step
+Meep progress: 20.166666666666664/200.0 = 10.1% done in 27.4s, 244.3s to go
+on time step 121 (time=20.1667), 0.101963 s/step
+Meep progress: 26.666666666666664/200.0 = 13.3% done in 31.4s, 204.1s to go
+on time step 160 (time=26.6667), 0.1028 s/step
+Meep progress: 33.166666666666664/200.0 = 16.6% done in 35.4s, 178.2s to go
+on time step 199 (time=33.1667), 0.102826 s/step
+Meep progress: 39.666666666666664/200.0 = 19.8% done in 39.4s, 159.4s to go
+on time step 238 (time=39.6667), 0.103259 s/step
+Meep progress: 46.33333333333333/200.0 = 23.2% done in 43.5s, 144.4s to go
+on time step 278 (time=46.3333), 0.102337 s/step
+Meep progress: 52.83333333333333/200.0 = 26.4% done in 47.6s, 132.6s to go
+on time step 317 (time=52.8333), 0.103857 s/step
+Meep progress: 59.5/200.0 = 29.8% done in 51.6s, 121.9s to go
+on time step 357 (time=59.5), 0.101424 s/step
+Meep progress: 66.16666666666666/200.0 = 33.1% done in 55.7s, 112.7s to go
+on time step 397 (time=66.1667), 0.101452 s/step
+Meep progress: 72.83333333333333/200.0 = 36.4% done in 59.8s, 104.4s to go
+on time step 437 (time=72.8333), 0.101712 s/step
+Meep progress: 79.5/200.0 = 39.8% done in 63.9s, 96.8s to go
+on time step 477 (time=79.5), 0.10201 s/step
+Meep progress: 86.16666666666666/200.0 = 43.1% done in 67.9s, 89.7s to go
+on time step 517 (time=86.1667), 0.101904 s/step
+Meep progress: 92.83333333333333/200.0 = 46.4% done in 72.0s, 83.1s to go
+on time step 557 (time=92.8333), 0.101591 s/step
+Meep progress: 99.5/200.0 = 49.8% done in 76.1s, 76.8s to go
+on time step 597 (time=99.5), 0.102205 s/step
+Meep progress: 106.16666666666666/200.0 = 53.1% done in 80.1s, 70.8s to go
+on time step 637 (time=106.167), 0.100537 s/step
+Meep progress: 112.83333333333333/200.0 = 56.4% done in 84.2s, 65.0s to go
+on time step 677 (time=112.833), 0.101036 s/step
+Meep progress: 119.5/200.0 = 59.8% done in 88.2s, 59.4s to go
+on time step 717 (time=119.5), 0.1016 s/step
+Meep progress: 126.16666666666666/200.0 = 63.1% done in 92.3s, 54.0s to go
+on time step 757 (time=126.167), 0.101968 s/step
+Meep progress: 132.66666666666666/200.0 = 66.3% done in 96.3s, 48.9s to go
+on time step 796 (time=132.667), 0.103129 s/step
+Meep progress: 139.33333333333331/200.0 = 69.7% done in 100.4s, 43.7s to go
+on time step 836 (time=139.333), 0.100884 s/step
+Meep progress: 146.0/200.0 = 73.0% done in 104.4s, 38.6s to go
+on time step 876 (time=146), 0.101314 s/step
+Meep progress: 152.66666666666666/200.0 = 76.3% done in 108.4s, 33.6s to go
+on time step 916 (time=152.667), 0.100651 s/step
+Meep progress: 159.33333333333331/200.0 = 79.7% done in 112.5s, 28.7s to go
+on time step 956 (time=159.333), 0.101288 s/step
+Meep progress: 166.0/200.0 = 83.0% done in 116.5s, 23.9s to go
+on time step 996 (time=166), 0.101072 s/step
+Meep progress: 172.66666666666666/200.0 = 86.3% done in 120.6s, 19.1s to go
+on time step 1036 (time=172.667), 0.102478 s/step
+Meep progress: 179.33333333333331/200.0 = 89.7% done in 124.7s, 14.4s to go
+on time step 1076 (time=179.333), 0.100627 s/step
+Meep progress: 186.0/200.0 = 93.0% done in 128.7s, 9.7s to go
+on time step 1116 (time=186), 0.102097 s/step
+Meep progress: 192.66666666666666/200.0 = 96.3% done in 132.8s, 5.1s to go
+on time step 1156 (time=192.667), 0.10271 s/step
+Meep progress: 199.33333333333331/200.0 = 99.7% done in 136.9s, 0.5s to go
+on time step 1196 (time=199.333), 0.100515 s/step
+run 0 finished at t = 200.0 (1200 timesteps)
+
+
+**********
+
+
+Flux: 184.80376298631242
+Transmittance: 0.999656
+Reflectance: 0.000068
+Absorption: 0.00034360920050746646 over 90 um
+lambda = 261.8804635249138 mm
+Saved Sim5a_Eps_B.png
+Saved Sim5a_Ez_B.png
+Saved Sim5a_Ez_CS_B.png
+
+
+**********
+
+
+Program finished.
+
+Elapsed run time = 682.6476 s
