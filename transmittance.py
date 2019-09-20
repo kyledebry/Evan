@@ -10,6 +10,8 @@ import matplotlib.colors as pltcolors
 import sys
 
 
+# Custom color map to plot fields where 0 stays at the center of the color map
+# even if all field values are positive
 class ZeroNormalize(pltcolors.Normalize):
     def __init__(self, vmax=1, clip=False):
         vmin = -vmax
@@ -21,15 +23,23 @@ class ZeroNormalize(pltcolors.Normalize):
 
 
 def main():
+    # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
+    # Number of pixels per micron
     resolution = 6
+    # Simulation volume (um)
     cell_x = 120
     cell_y = 70
     cell_z = 110
+    # Refractive indicies
     index_clad = 1.444
     index_core = 1.4475
+    numerical_aperature = math.sqrt(index_core^2 - index_clad^2)
+    # Durations in units of micron/c
     duration = 2 * cell_x # round(1.5 * cell_x + 30)
+    # Absorbing layer on boundary
     pml = 2
+    # Geometry
     src_buffer = 2
     mosi_buffer = 2
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
@@ -42,18 +52,26 @@ def main():
     cladding_min_radius = cladding_min_thickness + core_radius
     mosi_thickness = 0.5
     mosi_width = 2
+    # Offset the axis of the fiber to reduce simulation volume in side-polished
+    # fiber simulations
     bottom_min = core_radius + mosi_thickness
     axis_y = 4 * cell_y / 10 - pml - bottom_min
+    # Properties of the absorber
     mosi_center_y = axis_y # + cladding_min_radius + mosi_thickness / 2
-    cell = mp.Vector3(cell_x, cell_y, cell_z)
-    freq = 1/wavelength
-    src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y / 2, 0)
-    output_slice = mp.Volume(center=mp.Vector3(), size=(cell_x, cell_y, 0))
     mosi_index = index_core # 1.61
+    # MoSi is ~50 times thicker than in reality to have enough simulation pixels
+    # so we reduce its absorption by a factor of 50 to compensate
     mosi_thickness_comp = 50
     mosi_k = 7.55
     conductivity = 2 * math.pi * wavelength * mosi_k / mosi_index / mosi_thickness_comp
 
+    # Generate simulation obejcts
+    cell = mp.Vector3(cell_x, cell_y, cell_z)
+    freq = 1/wavelength
+    src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, axis_y / 2, 0)
+    output_slice = mp.Volume(center=mp.Vector3(), size=(cell_x, cell_y, 0))
+
+    # Log important quantities
     print('File prefix: {}'.format(file_prefix))
     print('Duration: {}'.format(duration))
     print('Resolution: {}'.format(resolution))
@@ -62,6 +80,8 @@ def main():
     print('Distance from core to absorber: {} um'.format(cladding_min_thickness))
     print('Core thickness: {} um'.format(core_thickness))
     print('Cladding max thickness: {} um'.format(cladding_thickness))
+    print('Core index: {}; cladding index: {}'.format(index_core, index_clad))
+    print('Numerical aperature: {}'.format(numerical_aperature))
     print('Absorber dimensions: {} um, {} um, {} um'.format(mosi_length, mosi_thickness, mosi_width))
     print('Absorber center: {} um, {} um, {} um'.format(mosi_center_x, mosi_center_y, 0))
     print('Absorber n: {}, k: {}'.format(mosi_index, mosi_k))
@@ -70,6 +90,7 @@ def main():
 
     default_material=mp.Medium(epsilon=1)
 
+    # Physical geometry of the simulation
     geometry = [mp.Cylinder(center=mp.Vector3(y=axis_y), height=mp.inf, radius=cladding_thickness / 2,
                             material=mp.Medium(epsilon=1.444),
                             axis=mp.Vector3(1,0,0)),
@@ -81,10 +102,19 @@ def main():
                          material=mp.Medium(epsilon=1))
                 ]
 
+    # Have a non-absorbing object of the same index to find correct waveguide mode
+    absorber_replica = mp.Block(mp.Vector3(mp.inf, mosi_thickness, mosi_width),
+                                center=mp.Vector3(mosi_center_x, mosi_center_y, 0),
+                                material=mp.Medium(epsilon=mosi_index))
+
+    geometry.append(absorber_replica)
+
+    # Absorber will only be appended to geometry for the second simulation
     absorber = mp.Block(mp.Vector3(mosi_length, mosi_thickness, mosi_width),
                         center=mp.Vector3(mosi_center_x, mosi_center_y, 0),
                         material=mp.Medium(epsilon=mosi_index, D_conductivity=conductivity))
 
+    # Calculate eigenmode source
     sources = [mp.EigenModeSource(src=mp.ContinuousSource(frequency=freq),
               center=mp.Vector3(-cell_x / 2 + pml + src_buffer, axis_y, 0),
               size=mp.Vector3(0, cell_y - 4 * pml, cell_z - 4 * pml),
@@ -94,6 +124,7 @@ def main():
 
     pml_layers = [mp.PML(pml)]
 
+    # Pass all simulation parameters to meep
     sim = mp.Simulation(cell_size=cell,
                         boundary_layers=pml_layers,
                         geometry=geometry,
@@ -103,17 +134,22 @@ def main():
                         default_material=default_material,
                         symmetries=[mp.Mirror(mp.Z, phase=-1)])
 
+    # Create flux monitors to calculate transmission and absorption
     fr_y = max(min(cladding_thickness, cell_y - 2 * pml), 0)
     fr_z = max(min(cladding_thickness, cell_z - 2 * pml), 0)
 
+    # Reflected flux
     refl_fr = mp.FluxRegion(center=mp.Vector3(-0.5 * cell_x + pml + 2 * src_buffer, 0, 0),
                             size=mp.Vector3(0, fr_y, fr_z))
     refl = sim.add_flux(freq, 0, 1, refl_fr)
 
+    # Transmitted flux
     tran_fr = mp.FluxRegion(center=mp.Vector3(0.5 * cell_x - pml - src_buffer, 0, 0),
                             size=mp.Vector3(0, fr_y, fr_z))
     tran = sim.add_flux(freq, 0, 1, tran_fr)
 
+    # Run simulation, outputting the epsilon distribution and the fields in the
+    # x-y plane every 0.25 microns/c
     sim.run(mp.at_beginning(mp.output_epsilon),
             mp.to_appended("ez_z0",
                            mp.in_volume(output_slice,
@@ -122,9 +158,9 @@ def main():
 
     print('\n\n**********\n\n')
 
-    # for normalization run, save flux fields data for reflection plane
+    # For normalization run, save flux fields data for reflection plane
     no_absorber_refl_data = sim.get_flux_data(refl)
-    # save incident power for transmission plane
+    # Save incident power for transmission plane
     no_absorber_tran_flux = mp.get_fluxes(tran)
 
     print("Flux: {}".format(no_absorber_tran_flux[0]))
@@ -133,6 +169,7 @@ def main():
 
     max_field = 0.1
 
+    # Plot epsilon distribution
     if mp.am_master():
         plt.figure()
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
@@ -140,6 +177,7 @@ def main():
         plt.savefig(file_prefix + '_Eps_A.png', dpi=300)
         print('Saved ' + file_prefix + '_Eps_A.png')
 
+    # Plot field on x-y plane
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
     if mp.am_master():
         plt.figure()
@@ -149,6 +187,7 @@ def main():
         plt.savefig(file_prefix + '_Ez_A.png', dpi=300)
         print('Saved ' + file_prefix + '_Ez_A.png')
 
+    # Plot cross-sectional fields at several locations to ensure seeing nonzero fields
     eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
     num_x = 4
     num_y = 3
@@ -169,6 +208,7 @@ def main():
 
     print('\n\n**********\n\n')
 
+    # Reset simulation for absorption run
     sim.reset_meep()
 
     geometry.append(absorber)
@@ -187,6 +227,7 @@ def main():
 
     sim.load_minus_flux_data(refl, no_absorber_refl_data)
 
+    # Run simulation with absorber
     sim.run(mp.at_beginning(mp.output_epsilon),
             mp.to_appended("ez_z0",
                            mp.in_volume(output_slice,
@@ -195,6 +236,7 @@ def main():
 
     print('\n\n**********\n\n')
 
+    # Calculate transmission and absorption
     absorber_refl_flux = mp.get_fluxes(refl)
     absorber_tran_flux = mp.get_fluxes(tran)
 
@@ -213,6 +255,7 @@ def main():
 
     max_field = 0.1
 
+    # Plot epsilon distribution with absorber
     if mp.am_master():
         plt.figure()
         plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
@@ -220,6 +263,7 @@ def main():
         plt.savefig(file_prefix + '_Eps_B.png', dpi=300)
         print('Saved ' + file_prefix + '_Eps_B.png')
 
+    # Plot fields in x-y plane with absorber
     ez_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Ez)
     if mp.am_master():
         plt.figure()
@@ -229,6 +273,7 @@ def main():
         plt.savefig(file_prefix + '_Ez_B.png', dpi=300)
         print('Saved ' + file_prefix + '_Ez_B.png')
 
+    # Plot field cross sections with absorber
     eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
     num_x = 4
     num_y = 3
