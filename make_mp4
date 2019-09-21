@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ -d pngs ]; then echo "Directory pngs exists. Exiting.";
+else
+mkdir pngs
+mv main-ez_z0.h5 pngs
+echo "Creating images..."
+NUM_CMD='h5ls pngs/main-ez_z0.h5 | grep -Po [0-9]+(?=/Inf)'
+echo $NUM_CMD
+NUM=$(eval '$NUM_CMD')
+echo $NUM
+#h5topng -t 0:$NUM -R -Zc dkbluered pngs/main-ez_z0.h5 -o pngs/animation
+#echo "Creating video..."
+#ffmpeg -framerate 30 -i pngs/main-ez_z0.t%03d.png -pix_fmt yuv420p $1.mp4
+#echo "Cleaning up..."
+#rm pngs/*.png
+#mv pngs/main-ez_z0.h5 .
+#rmdir pngs
+#echo "Done"
+fi

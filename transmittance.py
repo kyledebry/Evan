@@ -26,7 +26,7 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 3
+    resolution = 6
     # Simulation volume (um)
     cell_x = 100
     cell_y = 60
@@ -48,7 +48,7 @@ def main():
     cladding_thickness = 90
     core_thickness = 2.3
     core_radius = core_thickness / 2
-    cladding_min_thickness = 0.2
+    cladding_min_thickness = 0
     cladding_min_radius = cladding_min_thickness + core_radius
     mosi_thickness = 0.5
     mosi_width = 2
