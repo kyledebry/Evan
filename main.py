@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 """Main file for running each simulation"""
-import transmittance as sim
+import pernice_replica as sim
 
 sim.main()
