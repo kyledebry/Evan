@@ -26,26 +26,28 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 250
+    resolution = 200
     # Simulation volume (um)
-    cell_x = 4
-    cell_y = 1.5
-    cell_z = 2.2
+    cell_x = 2.6
+    cell_y = 4
+    cell_z = 4.5
     # Refractive indicies
-    index_si = 3.4467
-    index_sio2 = 1.444 # For NA of 0.410
+    index_si = 3.6 # previously 3.4467
+    index_sio2 = 1.444
     # Durations in units of micron/c
-    duration = round(1.5 * cell_x + 5)
+    duration = round(1.5 * cell_x + 2)
+    num_timesteps = duration * resolution
     # Absorbing layer on boundary
-    pml = 0.2
+    pml = 0.8
     # Geometry
-    src_buffer = 0.005
+    src_buffer = pml / 16
     nbn_buffer = 0.005
     nbn_length = cell_x - 2 * pml - src_buffer - 2 * nbn_buffer
     nbn_center_x = src_buffer / 2
     wavelength = 1.55
     waveguide_width = 0.750 # 750 nm
     waveguide_height = 0.110 # 110 nm
+    plane_shift_y = 0
 
     nbn_thickness = 0.016
     nbn_width = 0.100
@@ -82,11 +84,12 @@ def main():
     default_material=mp.Medium(epsilon=1)
 
     # Physical geometry of the simulation
-    geometry = [mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
-                         center=mp.Vector3(0, - cell_y / 2, 0),
-                         material=mp.Medium(epsilon=index_sio2)),
+    geometry = [
+                # mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
+                #          center=mp.Vector3(0, - cell_y / 2 + plane_shift_y, 0),
+                #          material=mp.Medium(epsilon=index_sio2)),
                 mp.Block(mp.Vector3(mp.inf, waveguide_height, waveguide_width),
-                         center=mp.Vector3(0, waveguide_height / 2, 0),
+                         center=mp.Vector3(0, waveguide_height / 2 + plane_shift_y, 0),
                          material=mp.Medium(epsilon=index_si))
                 ]
 
@@ -100,9 +103,14 @@ def main():
                 ]
 
     # Calculate eigenmode source
+    src_max_y = cell_y - 2 * pml - 2 * src_buffer
+    src_max_z = cell_z - 2 * pml - 2 * src_buffer
+    src_y = src_max_y # min(8 * waveguide_height, src_max_y)
+    src_z = src_max_z # min(3 * waveguide_width, src_max_z)
+
     sources = [mp.EigenModeSource(src=mp.ContinuousSource(frequency=freq),
-              center=mp.Vector3(-cell_x / 2 + pml + src_buffer, 0, 0),
-              size=mp.Vector3(0, cell_y - 2 * pml, cell_z - 2 * pml),
+              center=mp.Vector3(-cell_x / 2 + pml + src_buffer, waveguide_height / 2 + plane_shift_y, 0),
+              size=mp.Vector3(0, src_y, src_z),
               eig_match_freq=True,
               eig_parity=mp.ODD_Z,
               eig_band=1)]
@@ -143,6 +151,8 @@ def main():
 
     print('\n\n**********\n\n')
 
+    sim.fields.synchronize_magnetic_fields()
+
     # For normalization run, save flux fields data for reflection plane
     no_absorber_refl_data = sim.get_flux_data(refl)
     # Save incident power for transmission plane
@@ -151,6 +161,7 @@ def main():
     print("Flux: {}".format(no_absorber_tran_flux[0]))
 
     eps_data = sim.get_array(center=mp.Vector3(z=(nbn_spacing + nbn_width) / 2), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
+    eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
 
     max_field = 1.5
 
@@ -172,14 +183,42 @@ def main():
         plt.savefig(file_prefix + '_Ez_A.png', dpi=300)
         print('Saved ' + file_prefix + '_Ez_A.png')
 
+    energy_side_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.EnergyDensity)
+    if mp.am_master():
+        plt.figure()
+        plt.imshow(eps_data.transpose(), interpolation='spline36', cmap='binary')
+        plt.imshow(energy_side_data.transpose(), interpolation='spline36', cmap='hot', alpha=0.9)
+        plt.axis('off')
+        plt.savefig(file_prefix + '_Pwr0_A.png', dpi=300)
+        print('Saved ' + file_prefix + '_Pwr0_A.png')
+
+    # Plot energy density on y-z plane
+    energy_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(0, cell_y, cell_z), component=mp.EnergyDensity)
+    if mp.am_master():
+        plt.figure()
+        plt.imshow(eps_cross_data, interpolation='spline36', cmap='binary')
+        plt.imshow(energy_data, interpolation='spline36', cmap='hot', alpha=0.9)
+        plt.axis('off')
+        plt.savefig(file_prefix + '_Pwr1_A.png', dpi=300)
+        print('Saved ' + file_prefix + '_Pwr1_A.png')
+
+    energy_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.EnergyDensity)
+    if mp.am_master():
+        plt.figure()
+        plt.imshow(eps_cross_data, interpolation='spline36', cmap='binary')
+        plt.imshow(energy_data, interpolation='spline36', cmap='hot', alpha=0.9)
+        plt.axis('off')
+        plt.savefig(file_prefix + '_Pwr2_A.png', dpi=300)
+        print('Saved ' + file_prefix + '_Pwr2_A.png')
+
     # Plot cross-sectional fields at several locations to ensure seeing nonzero fields
-    eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
     num_x = 4
     num_y = 3
     fig, ax = plt.subplots(num_x, num_y)
     fig.suptitle('Cross Sectional Ez Fields')
+
     for i in range(num_x * num_y):
-        monitor_x = cell_x/4 + i * (cell_x / 8) / (num_x * num_y)
+        monitor_x = i * (cell_x / 4) / (num_x * num_y)
         ez_cross_data = sim.get_array(center=mp.Vector3(x=monitor_x), size=mp.Vector3(0, cell_y, cell_z), component=mp.Ez)
         ax_num = i // num_y, i % num_y
         if mp.am_master():
@@ -190,6 +229,22 @@ def main():
     if mp.am_master():
         plt.savefig(file_prefix + '_Ez_CS_A.png', dpi=300)
         print('Saved ' + file_prefix + '_Ez_CS_A.png')
+
+    fig_e, ax_e = plt.subplots(num_x, num_y)
+    fig_e.suptitle('Cross Sectional Energy Density')
+
+    for i in range(num_x * num_y):
+        monitor_x = i * (cell_x / 4) / (num_x * num_y)
+        energy_cross_data = sim.get_array(center=mp.Vector3(x=monitor_x), size=mp.Vector3(0, cell_y, cell_z), component=mp.EnergyDensity)
+        ax_num = i // num_y, i % num_y
+        if mp.am_master():
+            ax_e[ax_num].imshow(eps_cross_data, interpolation='spline36', cmap='binary')
+            ax_e[ax_num].imshow(energy_cross_data, interpolation='spline36', cmap='hot', alpha=0.9)
+            ax_e[ax_num].axis('off')
+            ax_e[ax_num].set_title('x = {}'.format(round(cell_x/4 + i / resolution, 3)))
+    if mp.am_master():
+        plt.savefig(file_prefix + '_Pwr_CS_A.png', dpi=300)
+        print('Saved ' + file_prefix + '_Pwr_CS_A.png')
 
     print('\n\n**********\n\n')
     """
