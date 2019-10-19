@@ -28,7 +28,7 @@ def main():
     # Number of pixels per micron
     resolution = 200
     # Simulation volume (um)
-    cell_x = 2.6
+    cell_x = 3.7
     cell_y = 4
     cell_z = 4.5
     # Refractive indicies
@@ -41,25 +41,27 @@ def main():
     pml = 0.8
     # Geometry
     src_buffer = pml / 16
-    nbn_buffer = 0.005
-    nbn_length = cell_x - 2 * pml - src_buffer - 2 * nbn_buffer
-    nbn_center_x = src_buffer / 2
+    nbn_buffer = src_buffer
+    nbn_length = cell_x - 2 * pml - src_buffer - nbn_buffer
+    nbn_center_x = (src_buffer + nbn_buffer) / 2
     wavelength = 1.55
     waveguide_width = 0.750 # 750 nm
     waveguide_height = 0.110 # 110 nm
     plane_shift_y = 0
 
-    nbn_thickness = 0.016
-    nbn_width = 0.100
-    nbn_spacing = 0.120
+    nbn_thickness = 0.010 # Actually 8 nm, but simulating 10 nm for 2 grid points
+    nbn_width = 0.100 # 100 nm
+    nbn_spacing = 0.120 # 120 nm
 
-    # nbn is ~50 times thicker than in reality to have enough simulation pixels
-    # so we reduce its absorption by a factor of 50 to compensate
-    nbn_thickness_comp = 4
+    # nbn is 10/8 times thicker than in reality to have enough simulation pixels
+    # so we reduce its absorption by a factor of 5/4 to compensate
+    nbn_thickness_comp = 5/4
     # Also compensate the difference in index by the same amount
-    nbn_index = 5.23 # Taken from Hu thesis p86
-    nbn_k = 5.82 # Taken from Hu thesis p86
-    conductivity = 2 * math.pi * wavelength * nbn_k / nbn_index / nbn_thickness_comp
+    nbn_base_index = 5.23 # Taken from Hu thesis p86
+    nbn_index = (5.23 - index_si) / nbn_thickness_comp + index_si
+    nbn_base_k = 5.82 # Taken from Hu thesis p86
+    nbn_k = nbn_base_k / nbn_thickness_comp
+    conductivity = 2 * math.pi * wavelength * nbn_k / nbn_index
 
     # Generate simulation obejcts
     cell = mp.Vector3(cell_x, cell_y, cell_z)
@@ -68,6 +70,7 @@ def main():
     output_slice = mp.Volume(center=mp.Vector3(y=(3 * waveguide_height / 4)), size=(cell_x, 0, cell_z))
 
     # Log important quantities
+    print('NON-ABSORBING RUN')
     print('File prefix: {}'.format(file_prefix))
     print('Duration: {}'.format(duration))
     print('Resolution: {}'.format(resolution))
@@ -77,7 +80,7 @@ def main():
     print('NbN thickness: {} um'.format(nbn_thickness))
     print('Si index: {}; SiO2 index: {}'.format(index_si, index_sio2))
     print('Absorber dimensions: {} um, {} um, {} um'.format(nbn_length, nbn_thickness, nbn_width))
-    print('Absorber n: {}, k: {}'.format(nbn_index, nbn_k))
+    print('Absorber n (base value): {} ({}), k: {} ({})'.format(nbn_index, nbn_base_index, nbn_k, nbn_base_k))
     print('Absorber compensation for thickness: {}'.format(nbn_thickness_comp))
     print('\n\n**********\n\n')
 
@@ -85,9 +88,9 @@ def main():
 
     # Physical geometry of the simulation
     geometry = [
-                # mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
-                #          center=mp.Vector3(0, - cell_y / 2 + plane_shift_y, 0),
-                #          material=mp.Medium(epsilon=index_sio2)),
+                mp.Block(mp.Vector3(mp.inf, cell_y, mp.inf),
+                         center=mp.Vector3(0, - cell_y / 2 + plane_shift_y, 0),
+                         material=mp.Medium(epsilon=index_sio2)),
                 mp.Block(mp.Vector3(mp.inf, waveguide_height, waveguide_width),
                          center=mp.Vector3(0, waveguide_height / 2 + plane_shift_y, 0),
                          material=mp.Medium(epsilon=index_si))
