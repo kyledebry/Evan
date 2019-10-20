@@ -72,7 +72,7 @@ def main():
     output_slice = mp.Volume(center=mp.Vector3(y=(3 * waveguide_height / 4)), size=(cell_x, 0, cell_z))
 
     # Log important quantities
-    print('NON-ABSORBING RUN')
+    print('ABSORBING RUN')
     print('File prefix: {}'.format(file_prefix))
     print('Duration: {}'.format(duration))
     print('Resolution: {}'.format(resolution))
@@ -84,7 +84,7 @@ def main():
     print('Absorber dimensions: {} um, {} um, {} um'.format(nbn_length, nbn_thickness, nbn_width))
     print('Absorber n (base value): {} ({}), k: {} ({})'.format(nbn_index, nbn_base_index, nbn_k, nbn_base_k))
     print('Absorber compensation for thickness: {}'.format(nbn_thickness_comp))
-    print('Flux lenght: {} um'.format(flux_length))
+    print('Flux length: {} um'.format(flux_length))
     print('\n\n**********\n\n')
 
     default_material=mp.Medium(epsilon=1)
@@ -108,6 +108,7 @@ def main():
                         material=mp.Medium(epsilon=nbn_index, D_conductivity=conductivity)),
                 ]
 
+    geometry += absorber
 
     # Calculate eigenmode source
     src_max_y = cell_y - 2 * pml - 2 * src_buffer
