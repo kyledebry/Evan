@@ -28,7 +28,7 @@ def main():
     # Number of pixels per micron
     resolution = 200
     # Simulation volume (um)
-    cell_x = 3.7
+    cell_x = 2.8
     cell_y = 4
     cell_z = 4.5
     # Refractive indicies
@@ -63,6 +63,8 @@ def main():
     nbn_k = nbn_base_k / nbn_thickness_comp
     conductivity = 2 * math.pi * wavelength * nbn_k / nbn_index
 
+    flux_length = cell_x - 2 * pml - 4 * src_buffer
+
     # Generate simulation obejcts
     cell = mp.Vector3(cell_x, cell_y, cell_z)
     freq = 1/wavelength
@@ -82,6 +84,7 @@ def main():
     print('Absorber dimensions: {} um, {} um, {} um'.format(nbn_length, nbn_thickness, nbn_width))
     print('Absorber n (base value): {} ({}), k: {} ({})'.format(nbn_index, nbn_base_index, nbn_k, nbn_base_k))
     print('Absorber compensation for thickness: {}'.format(nbn_thickness_comp))
+    print('Flux lenght: {} um'.format(flux_length))
     print('\n\n**********\n\n')
 
     default_material=mp.Medium(epsilon=1)
@@ -104,6 +107,7 @@ def main():
                         center=mp.Vector3(nbn_center_x, waveguide_height + nbn_thickness / 2, - nbn_spacing / 2),
                         material=mp.Medium(epsilon=nbn_index, D_conductivity=conductivity)),
                 ]
+
 
     # Calculate eigenmode source
     src_max_y = cell_y - 2 * pml - 2 * src_buffer
@@ -140,7 +144,7 @@ def main():
     refl = sim.add_flux(freq, 0, 1, refl_fr)
 
     # Transmitted flux
-    tran_fr = mp.FluxRegion(center=mp.Vector3(0.5 * cell_x - pml - src_buffer, 0, 0),
+    tran_fr = mp.FluxRegion(center=mp.Vector3(0.5 * cell_x - pml - 2 * src_buffer, 0, 0),
                             size=mp.Vector3(0, fr_y, fr_z))
     tran = sim.add_flux(freq, 0, 1, tran_fr)
 
