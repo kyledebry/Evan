@@ -26,11 +26,11 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 200
+    resolution = 100
     # Simulation volume (um)
-    cell_x = 2.8
+    cell_x = 4.8
     cell_y = 4
-    cell_z = 4.5
+    cell_z = 5
     # Refractive indicies
     index_si = 3.6 # previously 3.4467
     index_sio2 = 1.444
@@ -46,16 +46,17 @@ def main():
     nbn_center_x = (src_buffer + nbn_buffer) / 2
     wavelength = 1.55
     waveguide_width = 0.750 # 750 nm
-    waveguide_height = 0.110 # 110 nm
-    plane_shift_y = 0
-
-    nbn_thickness = 0.010 # Actually 8 nm, but simulating 10 nm for 2 grid points
-    nbn_width = 0.100 # 100 nm
-    nbn_spacing = 0.120 # 120 nm
+    waveguide_height = 0.150 # 110 nm
+    plane_shift_y = 0.5
 
     # nbn is 10/8 times thicker than in reality to have enough simulation pixels
     # so we reduce its absorption by a factor of 5/4 to compensate
-    nbn_thickness_comp = 5/4
+    nbn_thickness_comp = 250/resolution
+
+    nbn_thickness = 0.008 * nbn_thickness_comp # Actually 8 nm, but simulating this for 2 grid points
+    nbn_width = 0.100 # 100 nm
+    nbn_spacing = 0.120 # 120 nm
+
     # Also compensate the difference in index by the same amount
     nbn_base_index = 5.23 # Taken from Hu thesis p86
     nbn_index = (5.23 - index_si) / nbn_thickness_comp + index_si
@@ -69,7 +70,7 @@ def main():
     cell = mp.Vector3(cell_x, cell_y, cell_z)
     freq = 1/wavelength
     src_pt = mp.Vector3(-cell_x/2 + pml + src_buffer, 0, 0)
-    output_slice = mp.Volume(center=mp.Vector3(y=(3 * waveguide_height / 4)), size=(cell_x, 0, cell_z))
+    output_slice = mp.Volume(center=mp.Vector3(y=(3 * waveguide_height / 4) + plane_shift_y), size=(cell_x, 0, cell_z))
 
     # Log important quantities
     print('ABSORBING RUN')
@@ -101,10 +102,10 @@ def main():
 
     # Absorber will only be appended to geometry for the second simulation
     absorber = [mp.Block(mp.Vector3(nbn_length, nbn_thickness, nbn_width),
-                        center=mp.Vector3(nbn_center_x, waveguide_height + nbn_thickness / 2, nbn_spacing / 2),
+                        center=mp.Vector3(nbn_center_x, waveguide_height + nbn_thickness / nbn_thickness_comp / 2 + plane_shift_y, nbn_spacing / 2),
                         material=mp.Medium(epsilon=nbn_index, D_conductivity=conductivity)),
                 mp.Block(mp.Vector3(nbn_length, nbn_thickness, nbn_width),
-                        center=mp.Vector3(nbn_center_x, waveguide_height + nbn_thickness / 2, - nbn_spacing / 2),
+                        center=mp.Vector3(nbn_center_x, waveguide_height + nbn_thickness / nbn_thickness_comp / 2 + plane_shift_y, - nbn_spacing / 2),
                         material=mp.Medium(epsilon=nbn_index, D_conductivity=conductivity)),
                 ]
 
@@ -113,11 +114,13 @@ def main():
     # Calculate eigenmode source
     src_max_y = cell_y - 2 * pml - 2 * src_buffer
     src_max_z = cell_z - 2 * pml - 2 * src_buffer
-    src_y = src_max_y # min(8 * waveguide_height, src_max_y)
+    src_y = min(12 * waveguide_height, src_max_y)
     src_z = src_max_z # min(3 * waveguide_width, src_max_z)
 
+    src_center_y = plane_shift_y # 0
+
     sources = [mp.EigenModeSource(src=mp.ContinuousSource(frequency=freq),
-              center=mp.Vector3(-cell_x / 2 + pml + src_buffer, waveguide_height / 2 + plane_shift_y, 0),
+              center=mp.Vector3(-cell_x / 2 + pml + src_buffer, src_center_y, 0),
               size=mp.Vector3(0, src_y, src_z),
               eig_match_freq=True,
               eig_parity=mp.ODD_Z,
@@ -131,7 +134,7 @@ def main():
                         geometry=geometry,
                         sources=sources,
                         resolution=resolution,
-                        eps_averaging=False,
+                        # eps_averaging=False,
                         default_material=default_material,
                         symmetries=[mp.Mirror(mp.Z, phase=-1)])
 
