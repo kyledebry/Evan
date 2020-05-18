@@ -26,11 +26,11 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 100
+    resolution = 50
     # Simulation volume (um)
     cell_x = 10
-    cell_y = 4
-    cell_z = 4
+    cell_y = 8
+    cell_z = 8
     # Refractive indicies
     index_fiber = 1.444
     # Durations in units of micron/c
@@ -44,13 +44,13 @@ def main():
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
     fiber_thickness = 1
-    mosi_thickness = 0.05 # 10 nm
+    mosi_thickness = 0.04 # 40 nm
     # Properties of the absorber
-    mosi_center_y = mosi_thickness / 2
-    fiber_center_y = - mosi_center_y
-    # MoSi is ~1 times thicker than in reality to have enough simulation pixels
+    mosi_center_y = 0
+    fiber_center_y = 0
+    # MoSi is ~10 times thicker than in reality to have enough simulation pixels
     # so we reduce its absorption by a factor of 1 to compensate
-    mosi_thickness_comp = 5
+    mosi_thickness_comp = 10
     # Also compensate the difference in index by the same amount
     mosi_index = (1.61 - index_fiber) / mosi_thickness_comp + index_fiber
     mosi_k = 7.55
@@ -84,7 +84,7 @@ def main():
                 ]
 
     # Absorber will only be appended to geometry for the second simulation
-    absorber = mp.Cylinder(height=mosi_length, radius=fiber_thickness / 2, axis=mp.Vector3(1,0,0),
+    absorber = mp.Cylinder(height=mosi_length, radius=fiber_thickness / 2 + mosi_thickness, axis=mp.Vector3(1,0,0),
                         center=mp.Vector3(mosi_center_x, mosi_center_y, 0),
                         material=mp.Medium(epsilon=mosi_index, D_conductivity=conductivity))
 

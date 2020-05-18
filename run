@@ -1,5 +1,16 @@
 #!/bin/bash
 mpirun -np $2 --use-hwthread-cpus --bind-to core python main.py $1 2>&1 | tee $1.log
 ./make_mp4 $1
-mkdir results/$1
 
+if [ -d results ]; then echo "Directory results exists.";
+else
+"Creating directory results."
+mkdir results
+fi
+
+if [ -d results/$1 ]; then echo "Directory results/$1 exists. Exiting.";
+else
+mkdir results/$1
+mv $1* results/$1
+echo "Output files stored in results/$1."
+fi
