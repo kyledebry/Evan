@@ -48,7 +48,7 @@ def main():
     # Properties of the absorber
     mosi_center_y = 0
     fiber_center_y = 0
-    # MoSi is ~10 times thicker than in reality to have enough simulation pixels
+    # MoSi is ~5 times thicker than in reality to have enough simulation pixels
     # so we reduce its absorption by a factor of 1 to compensate
     mosi_thickness_comp = 10
     # Also compensate the difference in index by the same amount
@@ -125,9 +125,9 @@ def main():
     # Run simulation, outputting the epsilon distribution and the fields in the
     # x-y plane every 0.25 microns/c
     sim.run(mp.at_beginning(mp.output_epsilon),
-            mp.to_appended("ez_z0",
+            mp.to_appended("pwr",
                            mp.in_volume(output_slice,
-                                        mp.at_every(0.05, mp.output_efield_z))),
+                                        mp.at_every(0.05, mp.synchronized_magnetic(mp.output_tot_pwr)))),
             until=duration)
 
     print('\n\n**********\n\n')
@@ -231,9 +231,9 @@ def main():
 
     # Run simulation with absorber
     sim.run(mp.at_beginning(mp.output_epsilon),
-            mp.to_appended("ez_z0",
+            mp.to_appended("pwr",
                            mp.in_volume(output_slice,
-                                        mp.at_every(0.05, mp.output_efield_z))),
+                                        mp.at_every(0.05, mp.synchronized_magnetic(mp.output_tot_pwr)))),
             until=duration)
 
     print('\n\n**********\n\n')
