@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as pltcolors
 import sys
 
+# TODO: this current simulation could be made much more efficient by taking
+# advantage of cylindrical symmetry, effectively becoming a 2D simulation
 
 # Custom color map to plot fields where 0 stays at the center of the color map
 # even if all field values are positive
@@ -26,11 +28,11 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 50
+    resolution = 25
     # Simulation volume (um)
     cell_x = 10
-    cell_y = 8
-    cell_z = 8
+    cell_y = 6
+    cell_z = 6
     # Refractive indicies
     index_fiber = 1.444
     # Durations in units of micron/c
@@ -96,6 +98,7 @@ def main():
               eig_parity=mp.ODD_Z,
               eig_band=1)]
 
+    # PML is the boundary layer around the edges of the simulation volume
     pml_layers = [mp.PML(pml)]
 
     # Pass all simulation parameters to meep
@@ -122,7 +125,7 @@ def main():
                             size=mp.Vector3(0, fr_y, fr_z))
     tran = sim.add_flux(freq, 0, 1, tran_fr)
 
-    # Run simulation, outputting the epsilon distribution and the fields in the
+    # Run simulation, outputting the epsilon distribution and the power in the
     # x-y plane every 0.25 microns/c
     sim.run(mp.at_beginning(mp.output_epsilon),
             mp.to_appended("pwr",
@@ -142,6 +145,7 @@ def main():
     eps_data = sim.get_array(center=mp.Vector3(), size=mp.Vector3(cell_x, cell_y, 0), component=mp.Dielectric)
     eps_cross_data = sim.get_array(center=mp.Vector3(x=cell_x/4), size=mp.Vector3(0, cell_y, cell_z), component=mp.Dielectric)
 
+    # TODO: eliminate magic number
     max_field = 2
 
     # Plot epsilon distribution
@@ -213,6 +217,9 @@ def main():
     # Reset simulation for absorption run
     sim.reset_meep()
 
+    # Add the absorber material as the first item in the geometry list. It will
+    # then be partially overwritten by the fiber object, giving the correct end
+    # result
     geometry.insert(0, absorber)
 
     sim = mp.Simulation(cell_size=cell,
