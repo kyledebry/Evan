@@ -30,9 +30,9 @@ def main():
     # Number of pixels per micron
     resolution = 25
     # Simulation volume (um)
-    cell_x = 10
-    cell_y = 6
-    cell_z = 6
+    cell_x = 8
+    cell_y = 5
+    cell_z = 5
     # Refractive indicies
     index_fiber = 1.444
     # Durations in units of micron/c
