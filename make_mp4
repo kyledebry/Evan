@@ -12,7 +12,7 @@ echo "File contains frames 0 - $NUM."
 echo "Creating images..."
 h5topng -t 0:$NUM -R -c inferno pngs/main-pwr.h5
 echo "Creating video..."
-ffmpeg -framerate 30 -y -i pngs/main-pwr.t%0${#NUM}d.png -vcodec libx264 -pix_fmt yuv420p $1.mp4
+ffmpeg -hide_banner -loglevel panic -framerate 30 -y -i pngs/main-pwr.t%0${#NUM}d.png -vcodec libx264 -pix_fmt yuv420p $1.mp4
 echo "Cleaning up..."
 rm pngs/*.png
 mv pngs/main-pwr.h5 .
