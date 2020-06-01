@@ -28,7 +28,7 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 20
+    resolution = 50
     # Simulation volume (um)
     cell_x = 8
     cell_y = 8
