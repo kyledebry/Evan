@@ -35,7 +35,7 @@ def main():
     cell_z = 8
     # Refractive indicies
     index_fiber = 1.444
-    index_cladding = 3.5
+    index_cladding = 1.42
     # Durations in units of micron/c
     duration = 2 * cell_x # round(1.5 * cell_x + 5)
     # Absorbing layer on boundary
