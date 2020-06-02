@@ -28,11 +28,11 @@ def main():
     # Prefix all output files with the command line argument
     file_prefix = sys.argv[1]
     # Number of pixels per micron
-    resolution = 20
+    resolution = 50
     # Simulation volume (um)
     cell_x = 8
-    cell_y = 5
-    cell_z = 5
+    cell_y = 8
+    cell_z = 8
     # Refractive indicies
     index_fiber = 1.444
     # Durations in units of micron/c
@@ -45,7 +45,7 @@ def main():
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
-    fiber_thickness = 1
+    fiber_thickness = 2
     mosi_thickness = 0.04 # 40 nm
     # Properties of the absorber
     mosi_center_y = 0
