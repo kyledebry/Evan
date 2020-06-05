@@ -31,11 +31,11 @@ def main():
     resolution = 50
     # Simulation volume (um)
     cell_x = 8
-    cell_y = 8
-    cell_z = 8
+    cell_y = 9
+    cell_z = 9
     # Refractive indicies
     index_fiber = 1.444
-    index_cladding = 1.42
+    index_cladding = 3.5
     # Durations in units of micron/c
     duration = 2 * cell_x # round(1.5 * cell_x + 5)
     # Absorbing layer on boundary
@@ -47,7 +47,8 @@ def main():
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
     fiber_thickness = 1
-    cladding_thickness = 1.5
+    cladding_thickness = 3
+    middle_layer_thickness = 2
     mosi_thickness = 0.04 # 40 nm
     # Properties of the absorber
     mosi_center_y = 0
@@ -84,6 +85,9 @@ def main():
     # Physical geometry of the simulation
     geometry = [mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=cladding_thickness / 2,
                             material=mp.Medium(epsilon=index_cladding),
+                            axis=mp.Vector3(1,0,0)),
+                mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=middle_layer_thickness / 2,
+                            material=mp.Medium(epsilon=index_fiber),
                             axis=mp.Vector3(1,0,0)),
                 mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=fiber_thickness / 2,
                             material=mp.Medium(epsilon=index_fiber),
@@ -225,7 +229,7 @@ def main():
     # Add the absorber material as the first item in the geometry list. It will
     # then be partially overwritten by the fiber object, giving the correct end
     # result
-    geometry.insert(1, absorber)
+    geometry.insert(2, absorber)
 
     sim = mp.Simulation(cell_size=cell,
                         boundary_layers=pml_layers,
