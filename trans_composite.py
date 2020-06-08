@@ -30,12 +30,12 @@ def main():
     # Number of pixels per micron
     resolution = 50
     # Simulation volume (um)
-    cell_x = 8
-    cell_y = 9
-    cell_z = 9
+    cell_x = 6
+    cell_y = 6
+    cell_z = 6
     # Refractive indicies
     index_fiber = 1.444
-    index_cladding = 3.5
+    index_si = 3.5
     # Durations in units of micron/c
     duration = 2 * cell_x # round(1.5 * cell_x + 5)
     # Absorbing layer on boundary
@@ -46,9 +46,9 @@ def main():
     mosi_length = cell_x - 2 * pml - src_buffer - 2 * mosi_buffer
     mosi_center_x = src_buffer / 2
     wavelength = 1.55
-    fiber_thickness = 1
-    cladding_thickness = 3
-    middle_layer_thickness = 2
+    fiber_thickness = 0.9
+    cladding_thickness = 2.5
+    middle_layer_thickness = 1.2
     mosi_thickness = 0.04 # 40 nm
     # Properties of the absorber
     mosi_center_y = 0
@@ -83,11 +83,12 @@ def main():
     default_material=mp.Medium(epsilon=1)
 
     # Physical geometry of the simulation
-    geometry = [mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=cladding_thickness / 2,
-                            material=mp.Medium(epsilon=index_cladding),
+    geometry = [
+                mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=cladding_thickness / 2,
+                            material=mp.Medium(epsilon=index_fiber),
                             axis=mp.Vector3(1,0,0)),
                 mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=middle_layer_thickness / 2,
-                            material=mp.Medium(epsilon=index_fiber),
+                            material=mp.Medium(epsilon=index_si),
                             axis=mp.Vector3(1,0,0)),
                 mp.Cylinder(center=mp.Vector3(y=fiber_center_y), height=mp.inf, radius=fiber_thickness / 2,
                             material=mp.Medium(epsilon=index_fiber),
@@ -95,7 +96,7 @@ def main():
                 ]
 
     # Absorber will only be appended to geometry for the second simulation
-    absorber = mp.Cylinder(height=mosi_length, radius=fiber_thickness / 2 + mosi_thickness, axis=mp.Vector3(1,0,0),
+    absorber = mp.Cylinder(height=mosi_length, radius=cladding_thickness / 2 + mosi_thickness, axis=mp.Vector3(1,0,0),
                         center=mp.Vector3(mosi_center_x, mosi_center_y, 0),
                         material=mp.Medium(epsilon=mosi_index, D_conductivity=conductivity))
 
@@ -104,7 +105,7 @@ def main():
               center=mp.Vector3(-cell_x / 2 + pml + src_buffer, 0, 0),
               size=mp.Vector3(0, cell_y - 2 * pml, cell_z - 2 * pml),
               eig_match_freq=True,
-              eig_parity=mp.ODD_Z,
+              eig_parity=mp.ODD_Z + mp.EVEN_Y,
               eig_band=1)]
 
     # PML is the boundary layer around the edges of the simulation volume
@@ -118,7 +119,7 @@ def main():
                         resolution=resolution,
                         eps_averaging=True,
                         default_material=default_material,
-                        symmetries=[mp.Mirror(mp.Z, phase=-1)])
+                        symmetries=[mp.Mirror(mp.Z, phase=-1), mp.Mirror(mp.Y)])
 
     # Create flux monitors to calculate transmission and absorption
     fr_y = max(min(2 * fiber_thickness, cell_y - 2 * pml), 0)
@@ -229,7 +230,7 @@ def main():
     # Add the absorber material as the first item in the geometry list. It will
     # then be partially overwritten by the fiber object, giving the correct end
     # result
-    geometry.insert(2, absorber)
+    geometry.insert(0, absorber)
 
     sim = mp.Simulation(cell_size=cell,
                         boundary_layers=pml_layers,
@@ -238,7 +239,7 @@ def main():
                         resolution=resolution,
                         eps_averaging=False,
                         default_material=default_material,
-                        symmetries=[mp.Mirror(mp.Z, phase=-1)])
+                        symmetries=[mp.Mirror(mp.Z, phase=-1), mp.Mirror(mp.Y, phase=1)])
 
     refl = sim.add_flux(freq, 0, 1, refl_fr)
     tran = sim.add_flux(freq, 0, 1, tran_fr)
