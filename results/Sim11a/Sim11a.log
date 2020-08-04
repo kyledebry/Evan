@@ -1,0 +1,116 @@
+Using MPI version 3.1, 14 processes
+ABSORBING RUN
+File prefix: Sim11a
+Duration: 5
+Resolution: 100
+Dimensions: 2 um, 2 um, 2.5 um
+Wavelength: 1.55 um
+Si thickness: 0.11 um
+NbN thickness: 0.02 um
+Si index: 3.6; SiO2 index: 1.444
+Absorber dimensions: 0.9375 um, 0.02 um, 0.1 um
+Absorber n (base value): 4.252000000000001 (5.23), k: 2.3280000000000003 (5.82)
+Absorber compensation for thickness: 2.5
+Flux length: 0.875 um
+
+
+**********
+
+
+-----------
+Initializing structure...
+Halving computational cell along direction z
+Splitting into 12 chunks evenly
+time for choose_chunkdivision = 0.0246682 s
+Working in 3D dimensions.
+Computational cell is 2 x 2 x 2.5 with resolution 100
+     block, center = (0,0.055,0)
+          size (1e+20,0.11,0.75)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (3.6,3.6,3.6)
+time for set_epsilon = 1.00137 s
+-----------
+MPB solved for omega_1(0.988404,0,0) = 0.776797 after 15 iters
+MPB solved for omega_1(0.811225,0,0) = 0.642792 after 9 iters
+MPB solved for omega_1(0.81431,0,0) = 0.645161 after 6 iters
+MPB solved for omega_1(0.81431,0,0) = 0.645161 after 1 iters
+creating output file "./main-eps-000000000.h5"...
+creating output file "./main-ez_z0.h5"...
+Meep progress: 0.005/5.0 = 0.1% done in 11.3s, 11338.2s to go
+on time step 1 (time=0.005), 10.7146 s/step
+Meep progress: 0.26/5.0 = 5.2% done in 15.4s, 281.0s to go
+on time step 52 (time=0.26), 0.0796729 s/step
+Meep progress: 0.515/5.0 = 10.3% done in 19.4s, 169.2s to go
+on time step 103 (time=0.515), 0.0788121 s/step
+Meep progress: 0.775/5.0 = 15.5% done in 23.5s, 128.1s to go
+on time step 155 (time=0.775), 0.0781496 s/step
+Meep progress: 1.025/5.0 = 20.5% done in 27.5s, 106.8s to go
+on time step 205 (time=1.025), 0.0809226 s/step
+Meep progress: 1.28/5.0 = 25.6% done in 31.6s, 91.8s to go
+on time step 256 (time=1.28), 0.0791485 s/step
+Meep progress: 1.5350000000000001/5.0 = 30.7% done in 35.6s, 80.4s to go
+on time step 307 (time=1.535), 0.0787619 s/step
+Meep progress: 1.78/5.0 = 35.6% done in 39.7s, 71.8s to go
+on time step 356 (time=1.78), 0.0830891 s/step
+Meep progress: 2.035/5.0 = 40.7% done in 43.7s, 63.7s to go
+on time step 407 (time=2.035), 0.0797152 s/step
+Meep progress: 2.285/5.0 = 45.7% done in 47.8s, 56.8s to go
+on time step 457 (time=2.285), 0.0814894 s/step
+Meep progress: 2.52/5.0 = 50.4% done in 51.8s, 51.0s to go
+on time step 504 (time=2.52), 0.085699 s/step
+Meep progress: 2.7800000000000002/5.0 = 55.6% done in 55.9s, 44.6s to go
+on time step 556 (time=2.78), 0.0774532 s/step
+Meep progress: 3.0300000000000002/5.0 = 60.6% done in 59.9s, 39.0s to go
+on time step 606 (time=3.03), 0.0812368 s/step
+Meep progress: 3.285/5.0 = 65.7% done in 63.9s, 33.4s to go
+on time step 658 (time=3.29), 0.0783788 s/step
+Meep progress: 3.525/5.0 = 70.5% done in 68.0s, 28.4s to go
+on time step 706 (time=3.53), 0.0842576 s/step
+Meep progress: 3.7800000000000002/5.0 = 75.6% done in 72.0s, 23.3s to go
+on time step 757 (time=3.785), 0.0797737 s/step
+Meep progress: 4.035/5.0 = 80.7% done in 76.1s, 18.2s to go
+on time step 808 (time=4.04), 0.0786163 s/step
+Meep progress: 4.2700000000000005/5.0 = 85.4% done in 80.1s, 13.7s to go
+on time step 855 (time=4.275), 0.0852039 s/step
+Meep progress: 4.495/5.0 = 89.9% done in 84.1s, 9.5s to go
+on time step 900 (time=4.5), 0.090212 s/step
+Meep progress: 4.74/5.0 = 94.8% done in 88.2s, 4.8s to go
+on time step 949 (time=4.745), 0.0824097 s/step
+Meep progress: 4.96/5.0 = 99.2% done in 92.2s, 0.7s to go
+on time step 993 (time=4.965), 0.0920926 s/step
+run 0 finished at t = 5.0 (1000 timesteps)
+
+
+**********
+
+
+Flux: 1.30212993226395
+Icon theme "gnome" not found.
+Saved Sim11a_Eps_A.png
+Saved Sim11a_Ez_A.png
+Saved Sim11a_Pwr0_A.png
+Saved Sim11a_Pwr1_A.png
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Icon theme "gnome" not found.
+Saved Sim11a_Pwr2_A.png
+Saved Sim11a_Ez_CS_A.png
+Saved Sim11a_Pwr_CS_A.png
+
+
+**********
+
+
+Program finished.
+
+Elapsed run time = 110.9328 s

@@ -1,0 +1,105 @@
+Using MPI version 3.1, 14 processes
+ABSORBING RUN
+File prefix: Sim12b
+Duration: 10
+Resolution: 200
+Dimensions: 0 um, 5 um, 5 um
+Wavelength: 1.55 um
+Si thickness: 0.75 um
+NbN thickness: 0.01 um
+Si index: 3.6; SiO2 index: 1.444
+Absorber dimensions: -1.0625 um, 0.01 um, 0.1 um
+Absorber n (base value): 4.904 (5.23), k: 4.656000000000001 (5.82)
+Absorber compensation for thickness: 1.25
+Flux length: -1.125 um
+
+
+**********
+
+
+-----------
+Initializing structure...
+Halving computational cell along direction z
+Splitting into 12 chunks evenly
+time for choose_chunkdivision = 0.0383949 s
+Working in 3D dimensions.
+Computational cell is 0.005 x 5 x 5 with resolution 200
+     block, center = (0,-2.5,0)
+          size (1e+20,5,1e+20)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1.444,1.444,1.444)
+     block, center = (0,0.375,0)
+          size (1e+20,0.75,0.75)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (3.6,3.6,3.6)
+time for set_epsilon = 0.261404 s
+-----------
+    iteration   13: trace = 0.5814066663835177 (1.3506e-06% change)
+MPB solved for omega_1(1.22411,0,0) = 0.7625 after 19 iters
+MPB solved for omega_1(0.976356,0,0) = 0.646147 after 12 iters
+MPB solved for omega_1(0.974244,0,0) = 0.645161 after 8 iters
+MPB solved for omega_1(0.974244,0,0) = 0.645161 after 1 iters
+creating output file "./main-eps-000000000.h5"...
+creating output file "./main-pwr.h5"...
+Meep progress: 0.0025/10.0 = 0.0% done in 11.7s, 46918.3s to go
+on time step 1 (time=0.0025), 11.6744 s/step
+Meep progress: 0.47250000000000003/10.0 = 4.7% done in 15.7s, 317.3s to go
+on time step 189 (time=0.4725), 0.0212981 s/step
+Meep progress: 0.9625/10.0 = 9.6% done in 19.8s, 185.7s to go
+on time step 385 (time=0.9625), 0.0206197 s/step
+Meep progress: 1.4425000000000001/10.0 = 14.4% done in 23.8s, 141.2s to go
+on time step 577 (time=1.4425), 0.0209164 s/step
+Meep progress: 1.9100000000000001/10.0 = 19.1% done in 27.8s, 117.8s to go
+on time step 764 (time=1.91), 0.0214508 s/step
+Meep progress: 2.4/10.0 = 24.0% done in 31.8s, 100.7s to go
+on time step 960 (time=2.4), 0.0204524 s/step
+Meep progress: 2.88/10.0 = 28.8% done in 35.9s, 88.7s to go
+on time step 1152 (time=2.88), 0.0211126 s/step
+Meep progress: 3.33/10.0 = 33.3% done in 39.9s, 79.9s to go
+on time step 1332 (time=3.33), 0.0223244 s/step
+Meep progress: 3.8225000000000002/10.0 = 38.2% done in 43.9s, 70.9s to go
+on time step 1529 (time=3.8225), 0.0203214 s/step
+Meep progress: 4.29/10.0 = 42.9% done in 47.9s, 63.8s to go
+on time step 1716 (time=4.29), 0.0215336 s/step
+Meep progress: 4.745/10.0 = 47.4% done in 51.9s, 57.5s to go
+on time step 1898 (time=4.745), 0.0220411 s/step
+Meep progress: 5.22/10.0 = 52.2% done in 56.0s, 51.3s to go
+on time step 2088 (time=5.22), 0.021272 s/step
+Meep progress: 5.6975/10.0 = 57.0% done in 60.0s, 45.3s to go
+on time step 2279 (time=5.6975), 0.0209461 s/step
+Meep progress: 6.15/10.0 = 61.5% done in 64.0s, 40.1s to go
+on time step 2460 (time=6.15), 0.0222043 s/step
+Meep progress: 6.63/10.0 = 66.3% done in 68.0s, 34.6s to go
+on time step 2652 (time=6.63), 0.021127 s/step
+Meep progress: 7.0925/10.0 = 70.9% done in 72.1s, 29.5s to go
+on time step 2837 (time=7.0925), 0.0216548 s/step
+Meep progress: 7.5875/10.0 = 75.9% done in 76.1s, 24.2s to go
+on time step 3035 (time=7.5875), 0.0202513 s/step
+Meep progress: 8.0475/10.0 = 80.5% done in 80.1s, 19.4s to go
+on time step 3219 (time=8.0475), 0.0217515 s/step
+Meep progress: 8.52/10.0 = 85.2% done in 84.1s, 14.6s to go
+on time step 3408 (time=8.52), 0.0212698 s/step
+Meep progress: 9.012500000000001/10.0 = 90.1% done in 88.1s, 9.7s to go
+on time step 3605 (time=9.0125), 0.0203368 s/step
+Meep progress: 9.51/10.0 = 95.1% done in 92.1s, 4.7s to go
+on time step 3804 (time=9.51), 0.0201935 s/step
+Meep progress: 9.977500000000001/10.0 = 99.8% done in 96.1s, 0.2s to go
+on time step 3991 (time=9.9775), 0.0214669 s/step
+run 0 finished at t = 10.0 (4000 timesteps)
+
+
+**********
+
+
+Icon theme "gnome" not found.
+Saved Sim12b_Eps_A.png
+Saved Sim12b_Ez_A.png
+Saved Sim12b_Pwr1_A.png
+
+
+**********
+
+
+Program finished.
+
+Elapsed run time = 150.7752 s

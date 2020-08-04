@@ -1,0 +1,80 @@
+Using MPI version 3.1, 14 processes
+ABSORBING RUN
+File prefix: Sim12a
+Duration: 10
+Resolution: 250
+Dimensions: 0 um, 2 um, 2.5 um
+Wavelength: 1.55 um
+Si thickness: 0.11 um
+NbN thickness: 0.008 um
+Si index: 3.6; SiO2 index: 1.444
+Absorber dimensions: -1.0625 um, 0.008 um, 0.1 um
+Absorber n (base value): 5.23 (5.23), k: 5.82 (5.82)
+Absorber compensation for thickness: 1.0
+Flux length: -1.125 um
+
+
+**********
+
+
+-----------
+Initializing structure...
+Padding z to even number of grid points.
+Halving computational cell along direction z
+Splitting into 12 chunks evenly
+time for choose_chunkdivision = 0.0198203 s
+Working in 3D dimensions.
+Computational cell is 0.004 x 2 x 2.5 with resolution 250
+     block, center = (0,-1,0)
+          size (1e+20,2,1e+20)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (1.444,1.444,1.444)
+     block, center = (0,0.055,0)
+          size (1e+20,0.11,0.75)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (3.6,3.6,3.6)
+time for set_epsilon = 0.0778274 s
+-----------
+MPB solved for omega_1(0.988404,0,0) = 0.82295 after 17 iters
+MPB solved for omega_1(0.751845,0,0) = 0.637977 after 11 iters
+MPB solved for omega_1(0.760734,0,0) = 0.645154 after 8 iters
+MPB solved for omega_1(0.760743,0,0) = 0.645161 after 3 iters
+MPB solved for omega_1(0.760743,0,0) = 0.645161 after 1 iters
+creating output file "./main-eps-000000000.h5"...
+creating output file "./main-pwr.h5"...
+Meep progress: 0.06/10.0 = 0.6% done in 4.0s, 665.1s to go
+on time step 37 (time=0.074), 0.108197 s/step
+Meep progress: 1.242/10.0 = 12.4% done in 8.0s, 56.5s to go
+on time step 629 (time=1.258), 0.00675729 s/step
+Meep progress: 2.408/10.0 = 24.1% done in 12.0s, 37.9s to go
+on time step 1212 (time=2.424), 0.00686159 s/step
+Meep progress: 3.516/10.0 = 35.2% done in 16.0s, 29.5s to go
+on time step 1767 (time=3.534), 0.00721374 s/step
+Meep progress: 4.708/10.0 = 47.1% done in 20.0s, 22.5s to go
+on time step 2356 (time=4.712), 0.00681765 s/step
+Meep progress: 5.894/10.0 = 58.9% done in 24.0s, 16.7s to go
+on time step 2955 (time=5.91), 0.0066805 s/step
+Meep progress: 7.04/10.0 = 70.4% done in 28.0s, 11.8s to go
+on time step 3525 (time=7.05), 0.00704264 s/step
+Meep progress: 8.22/10.0 = 82.2% done in 32.0s, 6.9s to go
+on time step 4117 (time=8.234), 0.00676134 s/step
+Meep progress: 9.382/10.0 = 93.8% done in 36.0s, 2.4s to go
+on time step 4696 (time=9.392), 0.00691027 s/step
+run 0 finished at t = 10.0 (5000 timesteps)
+
+
+**********
+
+
+Icon theme "gnome" not found.
+Saved Sim12a_Eps_A.png
+Saved Sim12a_Ez_A.png
+Saved Sim12a_Pwr1_A.png
+
+
+**********
+
+
+Program finished.
+
+Elapsed run time = 69.1070 s
